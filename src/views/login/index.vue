@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <el-card class="login-card">
-      <img src="../../assets/images/logo_index.png" alt="">
+      <img src="../../assets/images/logo_index.png" alt="logo_index.png">
     </el-card>
   </div>
 </template>
