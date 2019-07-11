@@ -49,7 +49,8 @@ export default {
           { validator: validateMobile, trigger: 'blur' }
         ],
         code: [
-          { required: true, message: '请输入验证码(246810)', trigger: 'blur' }
+          { required: true, message: '请输入验证码(246810)', trigger: 'blur' },
+          { len: 6, message: '6位数SB', trigger: 'blur' }
         ]
       }
     }
