@@ -3,7 +3,7 @@
     <el-card class="login-card">
       <img src="../../assets/images/logo_index.png" alt="logo_index.png">
       <!-- s=表单 -->
-      <el-form :model="loginForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+      <el-form :model="loginForm" :rules="rules" status-icon ref="ruleForm" class="demo-ruleForm">
         <el-form-item prop="mobile">
           <el-input v-model="loginForm.mobile" placeholder="输入手机号码"></el-input>
         </el-form-item>
@@ -29,6 +29,15 @@
 <script>
 export default {
   data () {
+    const validateMobile = (rule, value, callback) => {
+      // 规则对象  输入的内容  回调函数（验证完毕需要调用）
+      // 当 callback() 成功  当前callback(new Error('错误提示'))  失败
+      if (/^1[3-9]\d{9}$/.test(value)) {
+        callback()
+      } else {
+        callback(new Error('手机号格式不正确'))
+      }
+    }
     return {
       loginForm: {
         mobile: '',
@@ -36,10 +45,12 @@ export default {
       },
       rules: {
         mobile: [
-          { required: true, message: '请输入手机号码', trigger: 'blur' }
+          { required: true, message: '请输入手机号码', trigger: 'blur' },
+          { validator: validateMobile, trigger: 'blur' }
         ],
         code: [
-          { required: true, message: '请输入验证码', trigger: 'blur' }
+          { required: true, message: '请输入验证码(246810)', trigger: 'blur' }
+
         ]
       }
     }
