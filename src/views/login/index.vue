@@ -12,7 +12,10 @@
           <el-button type="info" plain style="float:right">发送验证码</el-button>
         </el-form-item>
         <el-form-item>
-          <el-checkbox :value="true" ><span class="xy">我已阅读并同意</span>用户协议<span class="xy">和隐私</span>条款</el-checkbox>
+          <el-checkbox :value="true">
+            <span class="xy">我已阅读并同意</span>用户协议
+            <span class="xy">和隐私</span>条款
+          </el-checkbox>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onLogin" style="width:100%">登 基</el-button>
@@ -30,13 +33,19 @@ export default {
       loginForm: {
         mobile: '',
         code: ''
+      },
+      rules: {
+        mobile: [
+          { required: true, message: '请输入手机号码', trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '请输入验证码', trigger: 'blur' }
+        ]
       }
     }
   },
   methods: {
-    onLogin () {
-
-    }
+    onLogin () {}
   }
 }
 </script>
@@ -61,7 +70,7 @@ export default {
       margin: 20px auto;
     }
   }
-  .xy{
+  .xy {
     color: #ccc;
   }
 }
