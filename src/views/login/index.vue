@@ -3,7 +3,7 @@
     <el-card class="login-card">
       <img src="../../assets/images/logo_index.png" alt="logo_index.png">
       <!-- s=表单 -->
-      <el-form :model="loginForm" :rules="rules" status-icon ref="ruleForm" class="demo-ruleForm">
+      <el-form :model="loginForm" :rules="rules" status-icon ref="loginForm" class="demo-ruleForm">
         <el-form-item prop="mobile">
           <el-input v-model="loginForm.mobile" placeholder="输入手机号码"></el-input>
         </el-form-item>
@@ -56,7 +56,15 @@ export default {
     }
   },
   methods: {
-    onLogin () {}
+    onLogin () {
+      this.$refs.loginForm.validate((valid) => {
+        if (valid) {
+          // 为true 则全部判断成功 可以提交表单验证了
+        } else {
+          // 判断失败
+        }
+      })
+    }
   }
 }
 </script>
