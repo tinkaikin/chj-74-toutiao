@@ -45,21 +45,33 @@ export default {
       },
       rules: {
         mobile: [
-          { required: true, message: '请输入手机号码', trigger: 'blur' },
+          { required: true, message: '请输入手机号码(13911111111)', trigger: 'blur' },
           { validator: validateMobile, trigger: 'blur' }
         ],
         code: [
           { required: true, message: '请输入验证码(246810)', trigger: 'blur' }
-
         ]
       }
     }
   },
   methods: {
     onLogin () {
-      this.$refs.loginForm.validate((valid) => {
+      this.$refs.loginForm.validate(valid => {
         if (valid) {
           // 为true 则全部判断成功 可以提交表单验证了
+          this.$http
+            .post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations', this.loginForm)
+            .then(res => {
+              const { status, data } = res
+              if (status === 201) {
+                console.log(data)
+                // TODO 2. 保存用户的信息  用来判断登录的状态
+                this.$router.push('/')
+              }
+            })
+            .catch(() => {
+              this.$message.error('手机号或验证码错误')
+            })
         } else {
           // 判断失败
         }
