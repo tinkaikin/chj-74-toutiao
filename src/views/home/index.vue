@@ -106,6 +106,7 @@ export default {
     .dropdown{
       float: right;
       .el-dropdown-link{
+        cursor: pointer;
         img, b{
           vertical-align: middle;
           padding: 0 2px;
