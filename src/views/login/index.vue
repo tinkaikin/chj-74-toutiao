@@ -40,8 +40,8 @@ export default {
     }
     return {
       loginForm: {
-        mobile: '',
-        code: ''
+        mobile: '13911111111',
+        code: '246810'
       },
       rules: {
         mobile: [
@@ -65,8 +65,8 @@ export default {
             .then(res => {
               const { status, data } = res
               if (status === 201) {
-                console.log(data)
                 // TODO 2. 保存用户的信息  用来判断登录的状态
+                window.sessionStorage.setItem('chj74-toutiao', JSON.stringify(data.data))
                 this.$router.push('/')
               }
             })
