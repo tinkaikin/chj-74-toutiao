@@ -1,9 +1,11 @@
 <template>
   <el-container class="home-container">
-    <el-aside width="200px" class="home-aside">
-      <div class="logImg"></div>
+    <el-aside :width="isCollapse?'64px':'200px'" class="home-aside">
+      <div class="logImg" :class='{mixLogImg:isCollapse}'></div>
 
       <el-menu
+        :collapse="isCollapse"
+        :collapse-transition="false"
         style="border-right:none"
         default-active="1"
         class="el-menu"
@@ -43,7 +45,7 @@
     </el-aside>
     <el-container>
       <el-header class="home-header">
-        <span class="el-icon-s-fold"></span>
+        <span class="el-icon-s-fold" @click="isCollapse = !isCollapse"></span>
         <span class="text">江苏痔疮播客教育株式会社</span>
         <el-dropdown class="dropdown">
           <span class="el-dropdown-link">
@@ -62,7 +64,13 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      isCollapse: false
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -78,6 +86,10 @@ export default {}
       height: 60px;
       background: rgb(0,40,40) url('../../assets/images/logo_admin.png') no-repeat center;
     }
+    .mixLogImg{
+      background-image:url('../../assets/images/logo_admin_01.png');
+      background-size: 36px auto;
+    }
   }
   .home-header {
     border-bottom: 1px solid #ddd;
@@ -85,6 +97,7 @@ export default {}
     .el-icon-s-fold {
       font-size: 26px;
       vertical-align: middle;
+      cursor: pointer;
     }
     .text {
       margin-left: 5px;
