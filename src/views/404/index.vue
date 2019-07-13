@@ -4,12 +4,12 @@
 
 <script>
 export default {
-  created () {
-    // 测试token过期后,无法获取请求,并跳转到 /loing
-    this.$http.get('articles').then(res => {
-      console.log(res)
-    })
-  }
+  // created () {
+  //   // 测试token过期后,无法获取请求,并跳转到 /loing
+  //   this.$http.get('articles').then(res => {
+  //     console.log(res)
+  //   })
+  // }
 }
 </script>
 
