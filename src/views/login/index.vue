@@ -57,24 +57,31 @@ export default {
   },
   methods: {
     onLogin () {
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.loginForm.validate(async valid => {
         if (valid) {
           // 为true 则全部判断成功 可以提交表单验证了
-          this.$http
-            .post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations', this.loginForm)
-            .then(res => {
-              const { status, data } = res
-              if (status === 201) {
-                // TODO 2. 保存用户的信息  用来判断登录的状态
-                window.sessionStorage.setItem('chj74-toutiao', JSON.stringify(data.data))
-                this.$router.push('/')
-              }
-            })
-            .catch(() => {
-              this.$message.error('手机号或验证码错误')
-            })
-        } else {
-          // 判断失败
+          try {
+            const res = await this.$http.post('authorizations', this.loginForm)
+            window.sessionStorage.setItem('chj74-toutiao', JSON.stringify(res.data.data))
+            this.$router.push('/')
+          } catch (error) {
+            this.$message.error('手机号或验证码错误')
+          }
+        //   this.$http
+        //     .post('authorizations', this.loginForm)
+        //     .then(res => {
+        //       const { status, data } = res
+        //       if (status === 201) {
+        //         // TODO 2. 保存用户的信息  用来判断登录的状态
+        //         window.sessionStorage.setItem('chj74-toutiao', JSON.stringify(data.data))
+        //         this.$router.push('/')
+        //       }
+        //     })
+        //     .catch(() => {
+        //       this.$message.error('手机号或验证码错误')
+        //     })
+        // } else {
+        //   // 判断失败
         }
       })
     }

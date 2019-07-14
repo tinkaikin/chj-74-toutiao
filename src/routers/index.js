@@ -20,7 +20,7 @@ const router = new VueRouter({
     { name: '404', path: '*', component: NotFound }
   ]
 })
-// 路由过滤
+// 路由守卫过滤 3个问题
 router.beforeEach((to, from, next) => {
   if (to.path === '/login') return next()
   const user = window.sessionStorage.getItem('chj74-toutiao')

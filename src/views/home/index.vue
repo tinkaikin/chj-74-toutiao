@@ -53,8 +53,8 @@
             <b>嘿嘿小哥</b><i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-setting">个人设置</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-unlock">退出登录</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-setting" @click.native="setting">个人设置</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-unlock" @click.native="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -70,6 +70,17 @@ export default {
   data () {
     return {
       isCollapse: false
+    }
+  },
+  methods: {
+    setting () {
+      // 跳转页面
+      this.$router.push('/setting')
+    },
+    logout () {
+      // 退出登录 跳,remove token
+      window.sessionStorage.removeItem('chj74-toutiao')
+      this.$router.push('/login')
     }
   }
 }
