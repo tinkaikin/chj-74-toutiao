@@ -3,7 +3,7 @@
     <!-- s=搜索过滤 -->
     <el-card>
       <div slot="header">
-        <my-bread>粉丝管理</my-bread>
+        <my-bread>内容管理</my-bread>
       </div>
       <el-form :model="filterData" size="small" label-width="80px">
         <el-form-item label="状态 : ">
@@ -35,7 +35,7 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">筛选</el-button>
+          <el-button type="primary" @click.native='submit'>筛选</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import myBread from '../../components/my-bread'
+// import myBread from '../../components/my-bread'
 export default {
   data () {
     return {
@@ -61,8 +61,11 @@ export default {
       vlaueArr: [] // 存储开始时间和结束时间,O
     }
   },
-  components: {
-    myBread
+  methods: {
+    submit () {
+      console.log(this.filterData)
+      console.log(this.vlaueArr)
+    }
   }
 }
 </script>

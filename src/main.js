@@ -7,6 +7,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import router from './routers'
 // 导入axios实例
 import instance from './api/axios'
+import Componnets from './components'
+Vue.use(Componnets)
 Vue.prototype.$http = instance
 
 Vue.use(ElementUI)
