@@ -7,7 +7,7 @@
         :collapse="isCollapse"
         :collapse-transition="false"
         style="border-right:none"
-        default-active="/"
+        :default-active="$route.path"
         class="el-menu"
         background-color="#002033"
         text-color="#fff"
@@ -16,7 +16,7 @@
           <i class="el-icon-s-home"></i>
           <span slot="title">首页</span>
         </el-menu-item>
-        <el-menu-item index="/publish">
+        <el-menu-item index="/article">
           <i class="el-icon-document"></i>
           <span slot="title">内容管理</span>
         </el-menu-item>
@@ -24,7 +24,7 @@
           <i class="el-icon-picture"></i>
           <span slot="title">素材管理</span>
         </el-menu-item>
-        <el-menu-item index="/article">
+        <el-menu-item index="/publish">
           <i class="el-icon-s-promotion"></i>
           <span slot="title">发布文章</span>
         </el-menu-item>
@@ -49,8 +49,8 @@
         <span class="text">江苏痔疮播客教育株式会社</span>
         <el-dropdown class="dropdown">
           <span class="el-dropdown-link">
-            <img width="30" height="30" src="../../assets/images/avatar.jpg" alt="">
-            <b>嘿嘿小哥</b><i class="el-icon-arrow-down el-icon--right"></i>
+            <img width="30" height="30" :src="photo||'../../assets/images/avatar.jpg'" alt="">
+            <b>{{name||'小黑哥'}}</b><i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item icon="el-icon-setting" @click.native="setting">个人设置</el-dropdown-item>
@@ -69,8 +69,15 @@
 export default {
   data () {
     return {
-      isCollapse: false
+      isCollapse: false, // 控制导航展开和闭合,X
+      photo: '', // 用户头像,从token里获取,X
+      name: '' // 用户名,X
     }
+  },
+  created () {
+    const userInfo = JSON.parse(sessionStorage.getItem('chj74-toutiao'))
+    this.photo = userInfo.photo
+    this.name = userInfo.name
   },
   methods: {
     setting () {
