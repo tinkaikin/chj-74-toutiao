@@ -3,10 +3,7 @@
     <!-- s=搜索过滤 -->
     <el-card>
       <div slot="header">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-        </el-breadcrumb>
+        <my-bread>粉丝管理</my-bread>
       </div>
       <el-form :model="filterData" size="small" label-width="80px">
         <el-form-item label="状态 : ">
@@ -50,6 +47,7 @@
 </template>
 
 <script>
+import myBread from '../../components/my-bread'
 export default {
   data () {
     return {
@@ -62,6 +60,9 @@ export default {
       ], // 用来渲染下拉菜单的,等待请求
       vlaueArr: [] // 存储开始时间和结束时间,O
     }
+  },
+  components: {
+    myBread
   }
 }
 </script>
