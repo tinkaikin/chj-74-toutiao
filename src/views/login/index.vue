@@ -10,7 +10,7 @@
         <el-form-item prop="code">
           <el-input v-model="loginForm.code" placeholder="输入验证码" style="width:240px"></el-input>
           <el-button
-            type="info"
+            type="success"
             plain
             style="float:right"
             v-show="show"

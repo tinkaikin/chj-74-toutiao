@@ -41,7 +41,9 @@
     </el-card>
     <!-- e=搜索过滤 -->
     <!-- s=结果展示 -->
-    <el-card></el-card>
+    <el-card>
+      <template slot="header">根据筛选条件共查询到 <b>4769</b> 条结果: </template>
+    </el-card>
     <!-- e=结果展示 -->
   </div>
 </template>
@@ -90,7 +92,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 .el-card {
   margin-bottom: 20px;
+  background-color: #ddd;
 }
 </style>
