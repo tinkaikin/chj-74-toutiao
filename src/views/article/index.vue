@@ -19,9 +19,9 @@
           <el-select v-model="filterData.channel_id">
             <el-option
             v-for="item in options"
-            :key="item.channel_id"
+            :key="item.id"
             :label="item.name"
-            :value="item.channel_id"
+            :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -47,21 +47,40 @@
 </template>
 
 <script>
-// import myBread from '../../components/my-bread'
 export default {
   data () {
     return {
       filterData: {
         status: null, // 默认null,请求全部数据,很''的区别
-        channel_id: null // 频道id
+        channel_id: null, // 频道id
+        begin_pubdate: null, // 起始日期从vlaueArr[0]里获取
+        end_pubdate: null, // 结束日期vlaueArr[1]里获取
+        page: null, // 页数可省
+        per_page: null, // 每页数量可省
+        response_type: null // 返回数据的字段，不传返回用于内容管理的字段
       }, // 搜索过滤表单数据
       options: [
-        { channel_id: null, name: '全选' }
-      ], // 用来渲染下拉菜单的,等待请求
+        { id: null, name: '全选' }
+      ], // 用来渲染下拉菜单的,其他为请求来的数据
       vlaueArr: [] // 存储开始时间和结束时间,O
     }
   },
+  created () {
+    this.initGetChannel()
+  },
   methods: {
+    initGetChannel () {
+      this.$http
+        .get('channels')
+        .then(res => {
+          const { status, data } = res
+          if (status === 200) {
+            this.options = this.options.concat(data.data.channels)
+          } else {
+            alert('507 服务器数据库异常')
+          }
+        })
+    },
     submit () {
       console.log(this.filterData)
       console.log(this.vlaueArr)

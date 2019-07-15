@@ -9,7 +9,14 @@
         </el-form-item>
         <el-form-item prop="code">
           <el-input v-model="loginForm.code" placeholder="输入验证码" style="width:240px"></el-input>
-          <el-button type="info" plain style="float:right">发送验证码</el-button>
+          <el-button
+            type="info"
+            plain
+            style="float:right"
+            v-show="show"
+            @click.native="getCode"
+          >发送验证码</el-button>
+          <el-button type="info" plain style="float:right; width:100px" v-show="!show" >{{count}} s</el-button>
         </el-form-item>
         <el-form-item>
           <el-checkbox :value="true">
@@ -45,14 +52,22 @@ export default {
       },
       rules: {
         mobile: [
-          { required: true, message: '请输入手机号码(13911111111)', trigger: 'blur' },
+          {
+            required: true,
+            message: '请输入手机号码(13911111111)',
+            trigger: 'blur'
+          },
           { validator: validateMobile, trigger: 'blur' }
         ],
         code: [
           { required: true, message: '请输入验证码(246810)', trigger: 'blur' },
           { len: 6, message: '6位数SB', trigger: 'blur' }
         ]
-      }
+      },
+      // 验证码参数
+      count: '',
+      show: true,
+      timer: null
     }
   },
   methods: {
@@ -62,28 +77,49 @@ export default {
           // 为true 则全部判断成功 可以提交表单验证了
           try {
             const res = await this.$http.post('authorizations', this.loginForm)
-            window.sessionStorage.setItem('chj74-toutiao', JSON.stringify(res.data.data))
+            window.sessionStorage.setItem(
+              'chj74-toutiao',
+              JSON.stringify(res.data.data)
+            )
+            clearInterval(this.timer)
             this.$router.push('/')
           } catch (error) {
             this.$message.error('手机号或验证码错误')
           }
-        //   this.$http
-        //     .post('authorizations', this.loginForm)
-        //     .then(res => {
-        //       const { status, data } = res
-        //       if (status === 201) {
-        //         // TODO 2. 保存用户的信息  用来判断登录的状态
-        //         window.sessionStorage.setItem('chj74-toutiao', JSON.stringify(data.data))
-        //         this.$router.push('/')
-        //       }
-        //     })
-        //     .catch(() => {
-        //       this.$message.error('手机号或验证码错误')
-        //     })
-        // } else {
-        //   // 判断失败
+          //   this.$http
+          //     .post('authorizations', this.loginForm)
+          //     .then(res => {
+          //       const { status, data } = res
+          //       if (status === 201) {
+          //         // TODO 2. 保存用户的信息  用来判断登录的状态
+          //         window.sessionStorage.setItem('chj74-toutiao', JSON.stringify(data.data))
+          //         this.$router.push('/')
+          //       }
+          //     })
+          //     .catch(() => {
+          //       this.$message.error('手机号或验证码错误')
+          //     })
+          // } else {
+          //   // 判断失败
         }
       })
+    },
+    // 点击发送验证码
+    getCode () {
+      const TIME_COUNT = 60
+      if (!this.timer) {
+        this.count = TIME_COUNT
+        this.show = false
+        this.timer = setInterval(() => {
+          if (this.count > 0 && this.count <= TIME_COUNT) {
+            this.count--
+          } else {
+            this.show = true
+            clearInterval(this.timer)
+            this.timer = null
+          }
+        }, 1000)
+      }
     }
   }
 }
