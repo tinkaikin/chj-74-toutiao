@@ -22,7 +22,7 @@
         </el-form-item>
         <el-form-item label="时间 : ">
           <el-date-picker
-            @change='setDate'
+            @change="setDate"
             value-format="yyyy-MM-dd"
             v-model="vlaueArr"
             type="daterange"
@@ -45,7 +45,7 @@
       </template>
       <el-table :data="tableData">
         <!-- slot-scope="scope" 是关键获取tableData到slot标签在处理完成返回的数据 -->
-        <el-table-column label="封面" >
+        <el-table-column label="封面">
           <!-- 使用的是用 scope.row -->
           <template slot-scope="scope">
             <el-image :src="scope.row.cover.images[0]" style="width:100px;height:74px">
@@ -67,22 +67,22 @@
         </el-table-column>
         <el-table-column label="发布时间" prop="pubdate"></el-table-column>
         <el-table-column label="操作" width="120">
-          <template>
-            <el-button type="primary" icon="el-icon-edit" circle plain></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle plain></el-button>
+          <template slot-scope="{row:{id}}">
+            <el-button @click="edit(id)" type="primary" icon="el-icon-edit" circle plain></el-button>
+            <el-button @click="del(id)" type="danger" icon="el-icon-delete" circle plain></el-button>
           </template>
         </el-table-column>
       </el-table>
-        <div class="box">
-          <el-pagination
+      <div class="box">
+        <el-pagination
           :page-size="filterData.per_page"
           :current-page="filterData.page"
           @current-change="pageChange"
           background
           layout="prev, pager, next"
           :total="total"
-          ></el-pagination>
-        </div>
+        ></el-pagination>
+      </div>
     </el-card>
     <!-- e=结果展示 -->
   </div>
@@ -116,9 +116,33 @@ export default {
   methods: {
     // 请求文章数据
     async getArticles () {
-      const { data: { data } } = await this.$http.get('articles', { params: this.filterData })
+      const {
+        data: { data }
+      } = await this.$http.get('articles', { params: this.filterData })
       this.tableData = data.results
       this.total = data.total_count // 设置总条数
+    },
+    // 跳到编辑也
+    edit (id) {
+      this.$router.push(`/publish?id=${id}`)
+    },
+    // 删除文章
+    del (id) {
+      this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          await this.$http.delete(`articles/${id}`)
+          this.$message({ // 删除成功弹出消息提示
+            type: 'success',
+            message: '删除成功!'
+          })
+          // 再更新列表
+          this.getArticles()
+        })
+        .catch(() => {}) // 点击取消不进行操作
     },
     // 请求频道数据
     initGetChannel () {
@@ -155,10 +179,9 @@ export default {
 .el-card {
   margin-bottom: 20px;
   background-color: #ddd;
-  .box{
+  .box {
     margin-top: 10px;
     text-align: center;
   }
 }
-
 </style>

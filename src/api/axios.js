@@ -1,7 +1,15 @@
 import axios from 'axios'
+import JSONBig from 'json-bigint'
 
 const instance = axios.create({
-  baseURL: 'http://ttapi.research.itcast.cn/mp/v1_0/'
+  baseURL: 'http://ttapi.research.itcast.cn/mp/v1_0/',
+  transformResponse: [function (data) {
+    // 对 data 进行任意转换处理
+    if (data) {
+      return JSONBig.parse(data)
+    }
+    return data
+  }]
 })
 // 请求拦截
 instance.interceptors.request.use(config => {
@@ -18,7 +26,7 @@ instance.interceptors.request.use(config => {
 // 响应拦截
 instance.interceptors.response.use(response => response, error => {
   // 做一些事情
-  if (error.response.status === 401) {
+  if (error.response && error.response.status === 401) {
     // hash 哈希   是url后  #开始的字符串
     location.hash = '#/login'
   }
