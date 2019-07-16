@@ -16,6 +16,9 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道 : ">
+          <!-- 传入值value -->
+          <!-- 传入函数input -->
+          <!-- <my-channel :value='filterData.channel_id' @input="filterData.channel_id=$event.target.value"></my-channel> -->
           <el-select v-model="filterData.channel_id">
             <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
