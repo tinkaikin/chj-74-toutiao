@@ -41,7 +41,7 @@
     <el-card>
       <template slot="header">
         根据筛选条件共查询到
-        <b>4769</b> 条结果:
+        <b>{{total}}</b> 条结果:
       </template>
       <el-table :data="tableData">
         <!-- slot-scope="scope" 是关键获取tableData到slot标签在处理完成返回的数据 -->
@@ -67,12 +67,21 @@
         </el-table-column>
         <el-table-column label="发布时间" prop="pubdate"></el-table-column>
         <el-table-column label="操作" width="120">
-          <el-button type="primary" icon="el-icon-edit" circle plain></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle plain></el-button>
+          <template>
+            <el-button type="primary" icon="el-icon-edit" circle plain></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle plain></el-button>
+          </template>
         </el-table-column>
       </el-table>
         <div class="box">
-          <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
+          <el-pagination
+          :page-size="filterData.per_page"
+          :current-page="filterData.page"
+          @current-change="pageChange"
+          background
+          layout="prev, pager, next"
+          :total="total"
+          ></el-pagination>
         </div>
     </el-card>
     <!-- e=结果展示 -->
@@ -88,13 +97,14 @@ export default {
         channel_id: null, // 频道id
         begin_pubdate: null, // 起始日期从vlaueArr[0]里获取
         end_pubdate: null, // 结束日期vlaueArr[1]里获取
-        page: null, // 页数可省
-        per_page: null, // 每页数量可省
+        page: 1, // 当前页
+        per_page: 20, // 每页数量
         response_type: null // 返回数据的字段，不传返回用于内容管理的字段
       }, // 搜索过滤表单数据
       options: [{ id: null, name: '请选择' }], // 用来渲染下拉菜单的,其他为请求来的数据
       vlaueArr: [], // 存储开始时间和结束时间,O
-      tableData: [] // 获取表格的数据
+      tableData: [], // 获取表格的数据
+      total: 0 // 总条数文章
     }
   },
   created () {
@@ -108,6 +118,7 @@ export default {
     async getArticles () {
       const { data: { data } } = await this.$http.get('articles', { params: this.filterData })
       this.tableData = data.results
+      this.total = data.total_count // 设置总条数
     },
     // 请求频道数据
     initGetChannel () {
@@ -121,6 +132,8 @@ export default {
       })
     },
     submit () {
+      // 每次都要跳到第一页
+      this.filterData.page = 1
       // 筛选后请求文章数据
       this.getArticles()
     },
@@ -128,6 +141,11 @@ export default {
     setDate (value) {
       this.filterData.begin_pubdate = value[0]
       this.filterData.end_pubdate = value[1]
+    },
+    // 分页器
+    pageChange (page) {
+      this.filterData.page = page
+      this.getArticles()
     }
   }
 }
