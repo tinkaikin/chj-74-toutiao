@@ -18,10 +18,7 @@
         <el-form-item label="频道 : ">
           <!-- 传入值value -->
           <!-- 传入函数input -->
-          <!-- <my-channel :value='filterData.channel_id' @input="filterData.channel_id=$event.target.value"></my-channel> -->
-          <el-select v-model="filterData.channel_id">
-            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
-          </el-select>
+          <my-channel v-model="filterData.channel_id"></my-channel>
         </el-form-item>
         <el-form-item label="时间 : ">
           <el-date-picker
@@ -104,7 +101,6 @@ export default {
         per_page: 20, // 每页数量
         response_type: null // 返回数据的字段，不传返回用于内容管理的字段
       }, // 搜索过滤表单数据
-      options: [{ id: null, name: '请选择' }], // 用来渲染下拉菜单的,其他为请求来的数据
       vlaueArr: [], // 存储开始时间和结束时间,O
       tableData: [], // 获取表格的数据
       total: 0 // 总条数文章
@@ -113,8 +109,6 @@ export default {
   created () {
     // 请求文章数据
     this.getArticles()
-    // 请求频道数据
-    this.initGetChannel()
   },
   methods: {
     // 请求文章数据
@@ -146,17 +140,6 @@ export default {
           this.getArticles()
         })
         .catch(() => {}) // 点击取消不进行操作
-    },
-    // 请求频道数据
-    initGetChannel () {
-      this.$http.get('channels').then(res => {
-        const { status, data } = res
-        if (status === 200) {
-          this.options = this.options.concat(data.data.channels)
-        } else {
-          alert('507 服务器数据库异常')
-        }
-      })
     },
     submit () {
       // 每次都要跳到第一页
