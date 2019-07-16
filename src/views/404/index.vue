@@ -1,9 +1,16 @@
 <template>
-  <div class="container"></div>
+  <div class="container">
+    <my-test :id="total" @input='(id)=>{total=id}'></my-test>
+  </div>
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      total: 0
+    }
+  }
   // created () {
   //   // 测试token过期后,无法获取请求,并跳转到 /loing
   //   this.$http.get('articles').then(res => {
