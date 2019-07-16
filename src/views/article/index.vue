@@ -17,16 +17,13 @@
         </el-form-item>
         <el-form-item label="频道 : ">
           <el-select v-model="filterData.channel_id">
-            <el-option
-            v-for="item in options"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-            ></el-option>
+            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="时间 : ">
           <el-date-picker
+            @change='setDate'
+            value-format="yyyy-MM-dd"
             v-model="vlaueArr"
             type="daterange"
             range-separator="至"
@@ -35,14 +32,48 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click.native='submit'>筛选</el-button>
+          <el-button type="primary" @click.native="submit">筛选</el-button>
         </el-form-item>
       </el-form>
     </el-card>
     <!-- e=搜索过滤 -->
     <!-- s=结果展示 -->
     <el-card>
-      <template slot="header">根据筛选条件共查询到 <b>4769</b> 条结果: </template>
+      <template slot="header">
+        根据筛选条件共查询到
+        <b>4769</b> 条结果:
+      </template>
+      <el-table :data="tableData">
+        <!-- slot-scope="scope" 是关键获取tableData到slot标签在处理完成返回的数据 -->
+        <el-table-column label="封面" >
+          <!-- 使用的是用 scope.row -->
+          <template slot-scope="scope">
+            <el-image :src="scope.row.cover.images[0]" style="width:100px;height:74px">
+              <div slot="error">
+                <img src="../../assets/images/error.gif" width="100" height="74">
+              </div>
+            </el-image>
+          </template>
+        </el-table-column>
+        <el-table-column label="标题" prop="title"></el-table-column>
+        <el-table-column label="状态">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.status===0" type="info">草稿</el-tag>
+            <el-tag v-if="scope.row.status===1">待审核</el-tag>
+            <el-tag v-if="scope.row.status===2" type="success">审核通过</el-tag>
+            <el-tag v-if="scope.row.status===3" type="warning">审核失败</el-tag>
+            <el-tag v-if="scope.row.status===4" type="danger">已删除</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="发布时间" prop="pubdate"></el-table-column>
+        <el-table-column label="操作" width="120">
+          <el-button type="primary" icon="el-icon-edit" circle plain></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle plain></el-button>
+        </el-table-column>
+      </el-table>
+        <div class="box">
+          <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
+        </div>
     </el-card>
     <!-- e=结果展示 -->
   </div>
@@ -61,40 +92,55 @@ export default {
         per_page: null, // 每页数量可省
         response_type: null // 返回数据的字段，不传返回用于内容管理的字段
       }, // 搜索过滤表单数据
-      options: [
-        { id: null, name: '全选' }
-      ], // 用来渲染下拉菜单的,其他为请求来的数据
-      vlaueArr: [] // 存储开始时间和结束时间,O
+      options: [{ id: null, name: '请选择' }], // 用来渲染下拉菜单的,其他为请求来的数据
+      vlaueArr: [], // 存储开始时间和结束时间,O
+      tableData: [] // 获取表格的数据
     }
   },
   created () {
+    // 请求文章数据
+    this.getArticles()
+    // 请求频道数据
     this.initGetChannel()
   },
   methods: {
+    // 请求文章数据
+    async getArticles () {
+      const { data: { data } } = await this.$http.get('articles', { params: this.filterData })
+      this.tableData = data.results
+    },
+    // 请求频道数据
     initGetChannel () {
-      this.$http
-        .get('channels')
-        .then(res => {
-          const { status, data } = res
-          if (status === 200) {
-            this.options = this.options.concat(data.data.channels)
-          } else {
-            alert('507 服务器数据库异常')
-          }
-        })
+      this.$http.get('channels').then(res => {
+        const { status, data } = res
+        if (status === 200) {
+          this.options = this.options.concat(data.data.channels)
+        } else {
+          alert('507 服务器数据库异常')
+        }
+      })
     },
     submit () {
-      console.log(this.filterData)
-      console.log(this.vlaueArr)
+      // 筛选后请求文章数据
+      this.getArticles()
+    },
+    // 区间日期选择后赋值给filterData里
+    setDate (value) {
+      this.filterData.begin_pubdate = value[0]
+      this.filterData.end_pubdate = value[1]
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-
 .el-card {
   margin-bottom: 20px;
   background-color: #ddd;
+  .box{
+    margin-top: 10px;
+    text-align: center;
+  }
 }
+
 </style>
