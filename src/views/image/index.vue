@@ -17,17 +17,21 @@
         <li v-for="item in imgList" :key="item.id">
           <img :src="item.url" alt="">
           <!-- 收藏和删除按钮 -->
-          <div class="fot">
+          <div class="fot" v-if="!queryData.collect">
             <span class="el-icon-star-off" :class="{red:item.is_collected}" @click="toggleFav(item)"></span>
-            <span class="el-icon-delete"></span>
+            <span class="el-icon-delete" @click="deleteBtn(item.id)"></span>
           </div>
         </li>
       </ul>
       <!-- 分页器 -->
       <el-pagination
+        v-if="total>queryData.per_page"
+        @current-change="pageChange"
         background
         layout="prev, pager, next"
-        :total="1000">
+        :page-size="queryData.per_page"
+        :current-page="queryData.page"
+        :total="total">
       </el-pagination>
       <!-- e=图片展示部分 -->
     </el-card>
@@ -43,6 +47,7 @@ export default {
         page: 1,
         per_page: 10 // 每页数量
       },
+      total: 0, // 总页数
       imgList: [], // 图片列表
       loading: false // 加载动画
     }
@@ -52,11 +57,19 @@ export default {
     this.getimgListData()
   },
   methods: {
+    // 删除素材
+    async deleteBtn (id) {
+      await this.$http.delete('user/images/' + id)
+      this.getimgListData()
+    },
+    // 分页
+    pageChange (nowPage) {
+      this.queryData.page = nowPage
+      this.getimgListData()
+    },
     // 收藏按钮
     async toggleFav (item) {
-      // console.log(item)is_collected
       const { data: { data } } = await this.$http.put('user/images/' + item.id, { collect: !item.is_collected })
-      console.log(data)
       this.$message.success('操作成功')
       item.is_collected = data.collect
     },
@@ -67,9 +80,12 @@ export default {
       const { data: { data } } = await this.$http.get('user/images', { params: this.queryData })
       // 获取成功
       this.imgList = data.results
+      this.total = data.total_count
       this.loading = false
     },
-    collectChange (newValue) {
+    collectChange () {
+      // 回到第一页
+      this.queryData.page = 1
       // 切换重新获取数据
       this.getimgListData()
     }
@@ -94,7 +110,11 @@ export default {
         width: 100%;
         height: 100%;
       }
+      &:hover .fot{
+          display: block;
+      }
       .fot{
+        display: none;
         position: absolute;
         left: 0;
         bottom: 0;
@@ -104,6 +124,7 @@ export default {
         line-height: 30px;
         color: #fff;
         background-color: rgba(0,0,0,.5);
+
         span{
           cursor: pointer;
           margin: 0 15px;

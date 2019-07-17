@@ -1,0 +1,10 @@
+1. 7-17删除功能
+   请求的接口?  /mp/v1_0/user/images/:target     user/images/:target   
+   类型 ?     DELETE
+   传什么?  图片id
+   绑定什么事件?   deleteBtn(id)   <span class="el-icon-delete"></span>
+   删除前 ?  
+   删除后?    在请求渲染   this.getimgListData()
+2. 收藏列表 不显示下面的 fot div
+    根据什么来判断消失? collect 为true的时候是收藏
+
