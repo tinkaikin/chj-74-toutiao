@@ -2,6 +2,12 @@
   <el-container class="home-container">
     <el-aside :width="isCollapse?'64px':'200px'" class="home-aside">
       <div class="logImg" :class='{mixLogImg:isCollapse}'></div>
+      <!-- router 开启路由切换功能 必填 -->
+      <!-- :collapse="isCollapse"  根据true/false 来展开和收起 要加下面把动画关掉 非必填-->
+      <!-- :collapse-transition="false" 非必填-->
+      <!-- style="border-right:none" 非必填-->
+      <!-- :default-active="$route.path"  动态的根据url来匹配下面的路径  必填-->
+      <!-- router 开启路由切换功能 必填 -->
       <el-menu
         router
         :collapse="isCollapse"

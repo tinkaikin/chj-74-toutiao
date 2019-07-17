@@ -3,6 +3,11 @@
     <el-card class="login-card">
       <img src="../../assets/images/logo_index.png" alt="logo_index.png">
       <!-- s=表单 -->
+      <!-- :model="loginForm" 获取表单所有数据的集合在data里面定义好 基本必须-->
+      <!-- :rules="rules"  制定表单验证规则 配合  + prop='要验证的文本框'  + 下面定义的规则  基本必须    -->
+      <!-- ref="loginForm"  通过this.$refs对象获取此表单的dom对象 要对整个表单整体判断时使用  基本必须-->
+      <!-- status-icon  是否在输入框中显示校验结果反馈图标  好看而已-->
+      <!-- class="demo-ruleForm"  可以删掉-->
       <el-form :model="loginForm" :rules="rules" status-icon ref="loginForm" class="demo-ruleForm">
         <el-form-item prop="mobile">
           <el-input v-model="loginForm.mobile" placeholder="输入手机号码"></el-input>
@@ -54,7 +59,7 @@ export default {
         mobile: [
           {
             required: true,
-            message: '请输入手机号码(13911111111)',
+            message: '请输入手机号码(13200000000)',
             trigger: 'blur'
           },
           { validator: validateMobile, trigger: 'blur' }
@@ -72,6 +77,7 @@ export default {
   },
   methods: {
     onLogin () {
+      // 可变化成 async + await 的同步写法
       this.$refs.loginForm.validate(async valid => {
         if (valid) {
           // 为true 则全部判断成功 可以提交表单验证了

@@ -4,7 +4,7 @@ import JSONBig from 'json-bigint'
 const instance = axios.create({
   baseURL: 'http://ttapi.research.itcast.cn/mp/v1_0/',
   transformResponse: [function (data) {
-    // 对 data 进行任意转换处理
+    // 对 data 进行任意转换处理  使用了这个方法后,默认的JSON.parse处理方法就消失了
     if (data) {
       return JSONBig.parse(data)
     }

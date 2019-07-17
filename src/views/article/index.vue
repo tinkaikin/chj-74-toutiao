@@ -46,7 +46,6 @@
       <el-table :data="tableData">
         <!-- slot-scope="scope" 是关键获取tableData到slot标签在处理完成返回的数据 -->
         <el-table-column label="封面">
-          <!-- 使用的是用 scope.row -->
           <template slot-scope="scope">
             <el-image :src="scope.row.cover.images[0]" style="width:100px;height:74px">
               <div slot="error">
@@ -68,12 +67,19 @@
         <el-table-column label="发布时间" prop="pubdate"></el-table-column>
         <el-table-column label="操作" width="120">
           <template slot-scope="{row:{id}}">
+            <!-- 按钮1 编辑 / 按钮2 删除 -->
             <el-button @click="edit(id)" type="primary" icon="el-icon-edit" circle plain></el-button>
             <el-button @click="del(id)" type="danger" icon="el-icon-delete" circle plain></el-button>
           </template>
         </el-table-column>
       </el-table>
       <div class="box">
+        <!-- :page-size="filterData.per_page" 每页显示几条数据(要通过自己定义最好) 必填 -->
+        <!-- :current-page="filterData.page" 当前是第几页(很重要) 必填 -->
+        <!-- @current-change="pageChange" 组件给的事件(切换到当前页触发,携带参数) 必填 -->
+        <!-- background 值是个布尔字 加上这个才可以设置背景样式 非必填 -->
+        <!-- layout="prev, pager, next" 必填 -->
+        <!-- :total="total" 必填 总的数据 根据这个和条数显示最后的总页数 -->
         <el-pagination
           :page-size="filterData.per_page"
           :current-page="filterData.page"
