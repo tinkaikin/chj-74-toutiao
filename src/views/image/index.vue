@@ -10,7 +10,7 @@
           <el-radio-button :label="true">收藏</el-radio-button>
         </el-radio-group>
         <!-- 右边的普通按钮 1.图标太大-->
-        <el-button style="float:right" type="success" size="small">上传素材</el-button>
+        <el-button style="float:right" type="success" size="small" @click="dialogVisible=true">上传素材</el-button>
       </div>
       <!-- s=图片展示部分 1.样式-->
       <ul class="img-list">
@@ -35,6 +35,23 @@
       </el-pagination>
       <!-- e=图片展示部分 -->
     </el-card>
+    <!-- 对话框组件 -->
+    <!-- title="提示"  对话框的标题 -->
+    <!-- :visible="dialogVisible" 显示隐藏 -->
+    <!-- width="30%"  对话框的宽度-->
+    <!-- :before-close="handleClose"  关闭前的构造函数-->
+    <!-- @click="dialogVisible = false"  变成false 就把对话框关闭 -->
+    <el-dialog
+      title="添加素材"
+      :visible.sync="dialogVisible"
+      width="300px"
+      :before-close="handleClose">
+      <span>上传素材</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -49,7 +66,9 @@ export default {
       },
       total: 0, // 总页数
       imgList: [], // 图片列表
-      loading: false // 加载动画
+      loading: false, // 加载动画
+      // 对话框
+      dialogVisible: false // false 是关 true是 开
     }
   },
   created () {
@@ -58,9 +77,19 @@ export default {
   },
   methods: {
     // 删除素材
-    async deleteBtn (id) {
-      await this.$http.delete('user/images/' + id)
-      this.getimgListData()
+    deleteBtn (id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        await this.$http.delete('user/images/' + id)
+        this.getimgListData()
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {})
     },
     // 分页
     pageChange (nowPage) {

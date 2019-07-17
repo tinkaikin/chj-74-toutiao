@@ -3,8 +3,24 @@
    类型 ?     DELETE
    传什么?  图片id
    绑定什么事件?   deleteBtn(id)   <span class="el-icon-delete"></span>
-   删除前 ?  
+   删除前 ?   //弹出提示信息
    删除后?    在请求渲染   this.getimgListData()
 2. 收藏列表 不显示下面的 fot div
     根据什么来判断消失? collect 为true的时候是收藏
 
+3. 素材管理-上传素材功能 分析一下
+  过程:1.点击弹出框
+       2.弹出框 -> 点击上传图片 -> 浏览2s 后自动关闭
+
+  注意点: 使用el 的上传文件的组件, 它自带的ajax请求, 所以要重新设置请求头
+
+  请求地址?     // /mp/v1_0/   user/images
+  请求类型?     //  post
+  参数?         //image:    参数类型 file
+  设置请求头     //Authorization : .....
+
+4. 使用el 组件?     //对话框组件
+  对话框组件
+  dialogVisible: false  // 控制对话框显示隐藏的
+
+  
