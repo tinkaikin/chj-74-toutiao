@@ -2,7 +2,7 @@
   <div class='my-image-container'>
 
     <div class="img-btn"  @click="openDialog">
-      <img src="../assets/images/default.png" alt="">
+      <img :src="value" alt="">
     </div>
     <el-dialog
       :visible.sync="dialogVisible"
@@ -20,11 +20,11 @@
             </el-radio-group>
           </div>
           <div
-          class="imgList"
-          :class="{searched:selectedImageUrl===item.url}"
-          v-for="item in uploadImgList"
-          :key="item.id"
-          @click="searched(item.url)">
+            class="imgList"
+            :class="{searched:selectedImageUrl===item.url}"
+            v-for="item in uploadImgList"
+            :key="item.id"
+            @click="searched(item.url)">
             <img :src="item.url" alt="">
           </div>
           <el-pagination
@@ -38,18 +38,34 @@
           </el-pagination>
         </el-tab-pane>
         <!-- 上传图片 -->
-        <el-tab-pane label="上传图片" name="upload">上传图片</el-tab-pane>
+        <el-tab-pane label="上传图片" name="upload">
+          <!-- s=上传组件 -->
+          <el-upload
+            class="avatar-uploader"
+            action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+            :show-file-list="false"
+            :on-success="handleImgSuccess"
+            :headers="headers"
+            name='image'
+          >
+          <!-- 定义图片的地址 必填-->
+            <img v-if="uploadImageUrl" :src="uploadImageUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+          <!-- e=上传组件 -->
+        </el-tab-pane>
       </el-tabs>
       <!-- e=插入具体内容 -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="okButton">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import defaultImg from '../assets/images/default.png'
 export default {
   name: 'my-image',
   data () {
@@ -64,10 +80,28 @@ export default {
       },
       total: 0, // 总页数
       uploadImgList: [], // 图片列表
-      selectedImageUrl: null // 收藏图片的地址
+      selectedImageUrl: null, // 收藏图片的地址
+      headers: { Authorization: 'Bearer ' + JSON.parse(window.sessionStorage.getItem('chj74-toutiao')).token },
+      uploadImageUrl: null, // 上传图片
+      value: defaultImg // 默认图片
     }
   },
   methods: {
+    // 确定按钮
+    okButton () {
+      if (this.activeName === 'image') {
+        if (!this.selectedImageUrl) return this.$message('请选择素材')
+        this.value = this.selectedImageUrl
+      } else {
+        if (!this.uploadImageUrl) return this.$message('请上传素材')
+        this.value = this.uploadImageUrl
+      }
+      this.dialogVisible = false
+    },
+    // 上传
+    handleImgSuccess (res, file) {
+      this.uploadImageUrl = res.data.url
+    },
     // 选中图片
     searched (url) {
       this.selectedImageUrl = url
@@ -75,6 +109,8 @@ export default {
     // 弹出对话框
     openDialog () {
       this.dialogVisible = true
+      this.uploadImageUrl = null
+      this.selectedImageUrl = null
       this.getimgListData()
     },
     // 分页
