@@ -1,5 +1,5 @@
 <template>
-  <div class="publish">
+  <div class="publish-container">
     <el-card>
       <div slot="header">
         <my-bread>发布文章</my-bread>
@@ -9,7 +9,7 @@
           <el-input style="width:400px" v-model="queryFormData.title"></el-input>
         </el-form-item>
         <el-form-item label="内容">
-          <quill-editor v-model="queryFormData.content"></quill-editor>
+          <quill-editor v-model="queryFormData.content" :options="editorOption"></quill-editor>
         </el-form-item>
         <el-form-item label="封面">
           <el-radio-group v-model="queryFormData.cover.type">
@@ -58,7 +58,20 @@ export default {
 
         },
         channel_id: null // integer必须文章所属频道id
+      },
+      editorOption: {
+        placeholder: '',
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ 'header': 1 }, { 'header': 2 }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }]
+          ]
+        }
       }
+
     }
   }
 }

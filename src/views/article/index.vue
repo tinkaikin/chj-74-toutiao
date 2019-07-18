@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="article-container">
     <!-- s=搜索过滤 -->
     <el-card>
       <div slot="header">

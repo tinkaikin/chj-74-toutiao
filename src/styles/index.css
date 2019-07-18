@@ -1,5 +1,3 @@
-// 全局样式
-
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
@@ -23,17 +21,12 @@
   height: 178px;
   display: block;
 }
-
-
-.article-container .el-card__header{
+.article-container .el-card__header {
   border-bottom: 1px dashed #EBEEF5;
 }
-.publish-container {
-  .ql-toolbar.ql-snow{
-    padding: 0 8px;
-  }
-  .ql-container{
-    height: 200px;
-  }
-
+.publish-container .ql-toolbar.ql-snow {
+  padding: 0 8px;
+}
+.publish-container .ql-container {
+  height: 200px;
 }
