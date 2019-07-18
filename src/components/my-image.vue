@@ -1,14 +1,14 @@
 <template>
   <div class='my-image-container'>
-    <!-- 先这样写 -->
-    <div class="img-btn"  @click="dialogVisible = true">
+
+    <div class="img-btn"  @click="openDialog">
       <img src="../assets/images/default.png" alt="">
     </div>
     <el-dialog
       :visible.sync="dialogVisible"
       width="700px">
       <!-- s=插入具体内容 -->
-      <el-tabs v-model="activeName" type="card">
+      <el-tabs v-model="activeName" type="card" v-loading="loading">
         <el-tab-pane label="素材" name="image">
           <!-- 素材里面的内容 -->
           <div style="marginBottom:20px">
@@ -19,7 +19,12 @@
               <el-radio-button :label="true">收藏</el-radio-button>
             </el-radio-group>
           </div>
-          <div class="imgList" v-for="item in uploadImgList" :key="item.id" v-loading="loading">
+          <div
+          class="imgList"
+          :class="{searched:selectedImageUrl===item.url}"
+          v-for="item in uploadImgList"
+          :key="item.id"
+          @click="searched(item.url)">
             <img :src="item.url" alt="">
           </div>
           <el-pagination
@@ -49,6 +54,7 @@ export default {
   name: 'my-image',
   data () {
     return {
+      loading: false, // 加载动画
       dialogVisible: false, // 对话框
       activeName: 'image', // tab标签切换 image/upload
       queryData: {
@@ -57,13 +63,20 @@ export default {
         per_page: 8 // 每页数量
       },
       total: 0, // 总页数
-      uploadImgList: [] // 图片列表
+      uploadImgList: [], // 图片列表
+      selectedImageUrl: null // 收藏图片的地址
     }
   },
-  created () {
-    this.getimgListData()
-  },
   methods: {
+    // 选中图片
+    searched (url) {
+      this.selectedImageUrl = url
+    },
+    // 弹出对话框
+    openDialog () {
+      this.dialogVisible = true
+      this.getimgListData()
+    },
     // 分页
     currentChange (nowPage) {
       this.queryData.page = nowPage
@@ -92,6 +105,7 @@ export default {
 
 <style scoped lang='less'>
 .imgList{
+    position: relative;
     display: inline-block;
     width: 140px;
     height: 140px;
@@ -102,6 +116,17 @@ export default {
       width: 100%;
       height: 100%;
       object-fit: contain;
+    }
+    &.searched{
+      &::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, .2) url('../assets/images/selected.png') no-repeat center / 50px 50px;
+      }
     }
 }
 .img-btn{
