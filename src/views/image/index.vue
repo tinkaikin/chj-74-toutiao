@@ -101,11 +101,11 @@ export default {
     handleImgSuccess (res, file) {
       this.imageUrl = res.data.url
       this.$message.success('上传成功') // 提示成功
-      this.getimgListData()
       window.setTimeout(() => { // 2秒后关闭
         this.dialogVisible = false
         this.imageUrl = null
-      }, 5000)
+        this.getimgListData()
+      }, 2000)
     },
     // 删除素材
     deleteBtn (id) {
