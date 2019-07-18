@@ -9,7 +9,7 @@
           <el-input style="width:400px" v-model="queryFormData.title"></el-input>
         </el-form-item>
         <el-form-item label="内容">
-          <span>富文本</span>
+          <quill-editor v-model="queryFormData.content"></quill-editor>
         </el-form-item>
         <el-form-item label="封面">
           <el-radio-group v-model="queryFormData.cover.type">
@@ -35,7 +35,17 @@
 </template>
 
 <script>
+// require styles
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
+import { quillEditor } from 'vue-quill-editor'
+
 export default {
+  components: {
+    quillEditor
+  },
   data () {
     return {
       queryFormData: {
