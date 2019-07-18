@@ -20,7 +20,8 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item>
-          <div class="img-btn"><img src="../../assets/images/default.png" alt=""></div>
+          <!-- 封装插件 -->
+          <my-image></my-image>
         </el-form-item>
         <el-form-item label="频道">
           <my-channel v-model="queryFormData.channel_id"></my-channel>
@@ -78,13 +79,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .img-btn{
-    width: 150px;
-    height: 150px;
-    border: 1px dashed #ddd;
-    img{
-      width: 100%;
-      height: 100%;
-    }
-  }
+
 </style>
