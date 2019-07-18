@@ -2,7 +2,7 @@
   <div class='my-image-container'>
 
     <div class="img-btn"  @click="openDialog">
-      <img :src="value" alt="">
+      <img :src="value || defaultImg" alt="">
     </div>
     <el-dialog
       :visible.sync="dialogVisible"
@@ -58,7 +58,7 @@
       <!-- e=插入具体内容 -->
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="okButton">确 定</el-button>
+        <el-button type="primary" @click="okButton" :disabled="!uploadImageUrl">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -68,6 +68,7 @@
 import defaultImg from '../assets/images/default.png'
 export default {
   name: 'my-image',
+
   data () {
     return {
       loading: false, // 加载动画
@@ -83,18 +84,21 @@ export default {
       selectedImageUrl: null, // 收藏图片的地址
       headers: { Authorization: 'Bearer ' + JSON.parse(window.sessionStorage.getItem('chj74-toutiao')).token },
       uploadImageUrl: null, // 上传图片
-      value: defaultImg // 默认图片
+      defaultImg // 默认图片
     }
   },
+  props: ['value'],
   methods: {
     // 确定按钮
     okButton () {
       if (this.activeName === 'image') {
         if (!this.selectedImageUrl) return this.$message('请选择素材')
-        this.value = this.selectedImageUrl
+        this.$emit('input', this.selectedImageUrl)
+        // this.value = this.selectedImageUrl
       } else {
         if (!this.uploadImageUrl) return this.$message('请上传素材')
-        this.value = this.uploadImageUrl
+        this.$emit('input', this.uploadImageUrl)
+        // this.value = this.uploadImageUrl
       }
       this.dialogVisible = false
     },

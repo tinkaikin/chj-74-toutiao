@@ -21,7 +21,7 @@
         </el-form-item>
         <el-form-item>
           <!-- 封装插件 -->
-          <my-image></my-image>
+          <my-image v-model="queryFormData.cover.images[0]"></my-image>
         </el-form-item>
         <el-form-item label="频道">
           <my-channel v-model="queryFormData.channel_id"></my-channel>
