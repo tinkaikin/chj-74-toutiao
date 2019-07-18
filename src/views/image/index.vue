@@ -45,11 +45,30 @@
       title="添加素材"
       :visible.sync="dialogVisible"
       width="300px"
-      :before-close="handleClose">
-      <span>上传素材</span>
+    >
+      <!-- s=上传组件 -->
+      <!-- class="avatar-uploader" 样式在全局导入了 必填-->
+      <!-- action="上传后台的地址" 必填-->
+      <!-- :show-file-list="false" 是否显示文件列表()多张图时激发  必填-->
+      <!-- :on-success="handleAvatarSuccess" 上传成功后回调函数 2个参数打印 必填-->
+      <!-- :before-upload="beforeAvatarUpload" 上传前回调函数 没用-->
+      <!-- :headers="{Authorization: 'Bearer '}" 有需要要设置请求头 必填 -->
+      <!-- name='image' 上传的字段的名称看文档 必填 -->
+      <el-upload
+        class="avatar-uploader"
+        action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+        :show-file-list="false"
+        :on-success="handleImgSuccess"
+        :headers="headers"
+        name='image'
+      >
+      <!-- 定义图片的地址 必填-->
+        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
+      <!-- e=上传组件 -->
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button @click="dialogVisible = false">关 闭</el-button>
       </span>
     </el-dialog>
   </div>
@@ -68,7 +87,9 @@ export default {
       imgList: [], // 图片列表
       loading: false, // 加载动画
       // 对话框
-      dialogVisible: false // false 是关 true是 开
+      dialogVisible: false, // false 是关 true是 开
+      imageUrl: null, // 上传完的地址
+      headers: { Authorization: 'Bearer ' + JSON.parse(window.sessionStorage.getItem('chj74-toutiao')).token }
     }
   },
   created () {
@@ -76,6 +97,16 @@ export default {
     this.getimgListData()
   },
   methods: {
+    // 上传
+    handleImgSuccess (res, file) {
+      this.imageUrl = res.data.url
+      this.$message.success('上传成功') // 提示成功
+      this.getimgListData()
+      window.setTimeout(() => { // 2秒后关闭
+        this.dialogVisible = false
+        this.imageUrl = null
+      }, 5000)
+    },
     // 删除素材
     deleteBtn (id) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -162,6 +193,15 @@ export default {
           }
         }
       }
+    }
+  }
+  .avatar-uploader{
+    width:180px ;
+    height: 180px;
+    margin: 0 auto;
+    img{
+      width: 100%;
+      height: 100%;
     }
   }
 </style>

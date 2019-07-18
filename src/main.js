@@ -8,6 +8,9 @@ import router from './routers'
 // 导入axios实例
 import instance from './api/axios'
 import Componnets from './components'
+// 导入全局样式 注意要全路径导入
+import './styles/index.less'
+
 Vue.use(Componnets)
 Vue.prototype.$http = instance
 
