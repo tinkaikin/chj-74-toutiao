@@ -161,10 +161,12 @@ export default {
     li{
       float: left;
       position: relative;
-      width: 160px;
-      height: 160px;
+      width: 150px;
+      height: 150px;
       margin-left: 50px;
       margin-bottom: 30px;
+      border: 1px dashed #ddd;
+      padding: 5px;
       img{
         display: block;
         width: 100%;
