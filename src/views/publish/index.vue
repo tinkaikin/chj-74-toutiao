@@ -12,23 +12,29 @@
           <quill-editor v-model="queryFormData.content" :options="editorOption"></quill-editor>
         </el-form-item>
         <el-form-item label="封面">
-          <el-radio-group v-model="queryFormData.cover.type">
+          <el-radio-group v-model="queryFormData.cover.type" @change="typeChange">
             <el-radio :label="1">单图</el-radio>
             <el-radio :label="3">三图</el-radio>
             <el-radio :label="0">无图</el-radio>
             <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="queryFormData.cover.type===1">
           <!-- 封装插件 -->
           <my-image v-model="queryFormData.cover.images[0]"></my-image>
+        </el-form-item>
+        <el-form-item v-if="queryFormData.cover.type===3" class="type3">
+          <!-- 封装插件 -->
+          <my-image v-model="queryFormData.cover.images[0]"></my-image>
+          <my-image v-model="queryFormData.cover.images[1]"></my-image>
+          <my-image v-model="queryFormData.cover.images[2]"></my-image>
         </el-form-item>
         <el-form-item label="频道">
           <my-channel v-model="queryFormData.channel_id"></my-channel>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">发表</el-button>
-          <el-button>存入草稿</el-button>
+          <el-button type="primary" @click="uploadPublished(false)">发表</el-button>
+          <el-button type="info" @click="uploadPublished(true)">存入草稿</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -50,7 +56,7 @@ export default {
   data () {
     return {
       queryFormData: {
-        draft: false, // true 或 false,      //是否存为草稿（true 为草稿）
+        // draft: false, // true 或 false,      //是否存为草稿（true 为草稿）
         title: '', // string必须文章标题
         content: '', // string必须文章内容 X
         cover: {
@@ -60,6 +66,7 @@ export default {
         },
         channel_id: null // integer必须文章所属频道id
       },
+      // 富文本配置项
       editorOption: {
         placeholder: '',
         modules: {
@@ -72,12 +79,25 @@ export default {
           ]
         }
       }
-
+    }
+  },
+  methods: {
+    // 切换类型
+    typeChange () {
+      this.queryFormData.cover.images = []
+    },
+    async uploadPublished (draft) {
+      await this.$http.post('articles?draft=' + draft, this.queryFormData)
+      this.$message.success(!draft ? '发表成功' : '存入草稿成功')
+      this.$router.push('/article')
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-
+.type3 .my-image-container{
+  display: inline-block;
+  margin-right: 10px;
+}
 </style>
