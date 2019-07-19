@@ -68,7 +68,7 @@
       </el-upload>
       <!-- e=上传组件 -->
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">关 闭</el-button>
+        <el-button @click="dialogVisible = false" :disabled="imageUrl===null">关 闭</el-button>
       </span>
     </el-dialog>
   </div>
@@ -102,10 +102,10 @@ export default {
       this.imageUrl = res.data.url
       this.$message.success('上传成功') // 提示成功
       window.setTimeout(() => { // 2秒后关闭
-        this.dialogVisible = false
         this.imageUrl = null
         this.getimgListData()
-      }, 2000)
+        this.dialogVisible = false
+      }, 3000)
     },
     // 删除素材
     deleteBtn (id) {
@@ -169,6 +169,7 @@ export default {
         display: block;
         width: 100%;
         height: 100%;
+        object-fit: contain;
       }
       &:hover .fot{
           display: block;

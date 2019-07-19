@@ -2,7 +2,7 @@
   <div class="publish-container">
     <el-card>
       <div slot="header">
-        <my-bread>发布文章</my-bread>
+        <my-bread>{{isXiu?"修改文章":"发布文章"}}</my-bread>
       </div>
       <el-form label-width="100px" v-model="queryFormData">
         <el-form-item label="标题">
@@ -32,7 +32,11 @@
         <el-form-item label="频道">
           <my-channel v-model="queryFormData.channel_id"></my-channel>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="isXiu">
+          <el-button type="primary" @click="putPublished(false)">修改</el-button>
+          <el-button type="info" @click="putPublished(true)">修改草稿</el-button>
+        </el-form-item>
+        <el-form-item v-else>
           <el-button type="primary" @click="uploadPublished(false)">发表</el-button>
           <el-button type="info" @click="uploadPublished(true)">存入草稿</el-button>
         </el-form-item>
@@ -78,15 +82,55 @@ export default {
             [{ 'indent': '-1' }, { 'indent': '+1' }]
           ]
         }
+      },
+      articleId: null, // 文章的id
+      isXiu: false // 用正常的true/false 判断最好
+
+    }
+  },
+  watch: {
+    $route (data) {
+      this.articleId = null
+      this.isXiu = false
+      this.queryFormData = {
+        // draft: false, // true 或 false,      //是否存为草稿（true 为草稿）
+        title: '', // string必须文章标题
+        content: '', // string必须文章内容 X
+        cover: {
+          type: 1, // integer必须封面类型 -1:自动，0 :无图，1 :张，3 :张
+          images: [] // string []必须item 类型: string X
+
+        },
+        channel_id: null // integer必须文章所属频道id
       }
     }
   },
+  created () {
+    // 获取到id 有可能没有值
+    if (this.$route.query.id) {
+      this.articleId = this.$route.query.id
+      this.isXiu = true
+      this.getarticleById()
+    }
+  },
   methods: {
+    // 修改文章
+    async putPublished (draft) {
+      await this.$http.put(`articles/${this.articleId}?draft=${draft}`, this.queryFormData)
+      this.$message.success(!draft ? '发表成功' : '存入草稿成功')
+      this.$router.push('/article')
+    },
+    // 获取指定文章
+    async getarticleById () {
+      const { data: { data } } = await this.$http.get(`articles/${this.articleId}`)
+      this.queryFormData = data
+    },
     // 切换类型
     typeChange () {
       this.queryFormData.cover.images = []
     },
     async uploadPublished (draft) {
+      console.log('articles?draft=' + draft, this.queryFormData)
       await this.$http.post('articles?draft=' + draft, this.queryFormData)
       this.$message.success(!draft ? '发表成功' : '存入草稿成功')
       this.$router.push('/article')
