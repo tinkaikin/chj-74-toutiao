@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import eventBus from '@/eventBus'
 export default {
   data () {
     return {
@@ -83,6 +84,10 @@ export default {
     const userInfo = JSON.parse(sessionStorage.getItem('chj74-toutiao'))
     this.photo = userInfo.photo
     this.name = userInfo.name
+    // 非父子组件传值
+    eventBus.$on('upDataUserInfo', (data) => {
+      this.name = data
+    })
   },
   methods: {
     setting () {
