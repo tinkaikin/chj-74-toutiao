@@ -22,7 +22,9 @@
             :total="total">
           </el-pagination>
         </el-tab-pane>
-        <el-tab-pane label="粉丝画像" name="photo">粉丝画像</el-tab-pane>
+        <el-tab-pane label="粉丝画像" name="photo">
+          <div ref="bar" style="width: 600px;height:400px;"></div>
+        </el-tab-pane>
       </el-tabs>
 
     </el-card>
@@ -30,6 +32,15 @@
 </template>
 
 <script>
+// - 安装：npm i echarts
+// - 导入：import echarts from 'echarts'
+// - 准备：具备高宽的 DOM 容器  <div ref="bar"></div>
+// - 获取DOM：this.$refs.bar
+// - 初始化：const myEcharts = echarts.init(this.$refs.bar)
+// - 准备配置项和数据： 配置项依赖文档  数据依赖后台  const option = {}
+//   - option 参考提供的实例
+// - 使用配置和数据：myEcharts.setOption(option)
+import echarts from 'echarts'
 export default {
   data () {
     return {
@@ -44,6 +55,45 @@ export default {
   },
   created () {
     this.getFans()
+  },
+  mounted () {
+    const myEcharts = echarts.init(this.$refs.bar)
+    const option = {
+      angleAxis: {
+      },
+      radiusAxis: {
+        type: 'category',
+        data: ['周一', '周二', '周三', '周四'],
+        z: 10
+      },
+      polar: {
+      },
+      series: [{
+        type: 'bar',
+        data: [1, 2, 3, 4],
+        coordinateSystem: 'polar',
+        name: 'A',
+        stack: 'a'
+      }, {
+        type: 'bar',
+        data: [2, 4, 6, 8],
+        coordinateSystem: 'polar',
+        name: 'B',
+        stack: 'a'
+      }, {
+        type: 'bar',
+        data: [1, 2, 3, 4],
+        coordinateSystem: 'polar',
+        name: 'C',
+        stack: 'a'
+      }],
+      legend: {
+        show: true,
+        data: ['A', 'B', 'C']
+      }
+    }
+
+    myEcharts.setOption(option)
   },
   methods: {
     // 分页
