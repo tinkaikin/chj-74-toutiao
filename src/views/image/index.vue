@@ -62,11 +62,8 @@
     <!-- s=测试第图片弹出框 -->
       <el-dialog
         :visible.sync="dialogImg"
-        width="70%">
+        width="50%">
         <img :src="dialogImgUrl" alt="" width="100%" height="100%">
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogImg = false">取 消</el-button>
-        </span>
       </el-dialog>
     <!-- e=测试第图片弹出框 -->
   </div>
