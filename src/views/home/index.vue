@@ -51,7 +51,7 @@
     <el-container>
       <el-header class="home-header">
         <span class="el-icon-s-fold" @click="isCollapse = !isCollapse"></span>
-        <span class="text">江苏痔疮播客教育株式会社</span>
+        <span class="text">黑马头条你值得拥有株式会社</span>
         <el-dropdown class="dropdown">
           <span class="el-dropdown-link">
             <img width="30" height="30" :src="photo" alt="">

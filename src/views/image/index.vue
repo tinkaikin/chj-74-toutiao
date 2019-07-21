@@ -15,7 +15,7 @@
       <!-- s=图片展示部分 1.样式-->
       <ul class="img-list">
         <li v-for="item in imgList" :key="item.id">
-          <img :src="item.url" alt="">
+          <img :src="item.url" alt="" @click="previewImg(item.url)">
           <!-- 收藏和删除按钮 -->
           <div class="fot" v-if="!queryData.collect">
             <span class="el-icon-star-off" :class="{red:item.is_collected}" @click="toggleFav(item)"></span>
@@ -36,24 +36,12 @@
       <!-- e=图片展示部分 -->
     </el-card>
     <!-- 对话框组件 -->
-    <!-- title="提示"  对话框的标题 -->
-    <!-- :visible="dialogVisible" 显示隐藏 -->
-    <!-- width="30%"  对话框的宽度-->
-    <!-- :before-close="handleClose"  关闭前的构造函数-->
-    <!-- @click="dialogVisible = false"  变成false 就把对话框关闭 -->
     <el-dialog
       title="添加素材"
       :visible.sync="dialogVisible"
-      width="300px"
+      width="500px"
     >
       <!-- s=上传组件 -->
-      <!-- class="avatar-uploader" 样式在全局导入了 必填-->
-      <!-- action="上传后台的地址" 必填-->
-      <!-- :show-file-list="false" 是否显示文件列表()多张图时激发  必填-->
-      <!-- :on-success="handleAvatarSuccess" 上传成功后回调函数 2个参数打印 必填-->
-      <!-- :before-upload="beforeAvatarUpload" 上传前回调函数 没用-->
-      <!-- :headers="{Authorization: 'Bearer '}" 有需要要设置请求头 必填 -->
-      <!-- name='image' 上传的字段的名称看文档 必填 -->
       <el-upload
         class="avatar-uploader"
         action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
@@ -71,6 +59,16 @@
         <el-button @click="dialogVisible = false" :disabled="imageUrl===null">关 闭</el-button>
       </span>
     </el-dialog>
+    <!-- s=测试第图片弹出框 -->
+      <el-dialog
+        :visible.sync="dialogImg"
+        width="70%">
+        <img :src="dialogImgUrl" alt="" width="100%" height="100%">
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogImg = false">取 消</el-button>
+        </span>
+      </el-dialog>
+    <!-- e=测试第图片弹出框 -->
   </div>
 </template>
 
@@ -78,6 +76,10 @@
 export default {
   data () {
     return {
+      // 预览图片
+      dialogImg: false,
+      dialogImgUrl: null,
+
       queryData: {
         collect: false, // false 为全部
         page: 1,
@@ -97,6 +99,11 @@ export default {
     this.getimgListData()
   },
   methods: {
+    // 弹出预览图片
+    previewImg (url) {
+      this.dialogImg = true
+      this.dialogImgUrl = url
+    },
     // 上传
     handleImgSuccess (res, file) {
       this.imageUrl = res.data.url
