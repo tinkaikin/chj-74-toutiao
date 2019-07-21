@@ -54,8 +54,8 @@
         <span class="text">江苏痔疮播客教育株式会社</span>
         <el-dropdown class="dropdown">
           <span class="el-dropdown-link">
-            <img width="30" height="30" :src="photo||'../../assets/images/avatar.jpg'" alt="">
-            <b>{{name||'小黑哥'}}</b><i class="el-icon-arrow-down el-icon--right"></i>
+            <img width="30" height="30" :src="photo" alt="">
+            <b>{{name}}</b><i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item icon="el-icon-setting" @click.native="setting">个人设置</el-dropdown-item>
@@ -89,6 +89,12 @@ export default {
       this.name = data
       userInfo.name = data
       window.sessionStorage.setItem('chj74-toutiao', JSON.stringify(userInfo))
+    })
+    eventBus.$on('upDataPhoto', (photo) => {
+      this.photo = photo
+      userInfo.photo = photo
+      window.sessionStorage.setItem('chj74-toutiao', JSON.stringify(userInfo))
+      this.$message.success('头像更新成功')
     })
   },
   methods: {

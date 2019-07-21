@@ -85,7 +85,7 @@
           :current-page="filterData.page"
           @current-change="pageChange"
           background
-          layout="prev, pager, next"
+          layout="prev, pager, next, jumper"
           :total="total"
         ></el-pagination>
       </div>

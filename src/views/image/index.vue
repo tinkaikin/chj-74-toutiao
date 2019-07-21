@@ -28,7 +28,7 @@
         v-if="total>queryData.per_page"
         @current-change="pageChange"
         background
-        layout="prev, pager, next"
+        layout="prev, pager, next, jumper"
         :page-size="queryData.per_page"
         :current-page="queryData.page"
         :total="total">

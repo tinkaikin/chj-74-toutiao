@@ -30,6 +30,7 @@
             class="avatar-uploader"
             action=""
             :show-file-list="false"
+            :http-request="myHttpRequest"
           >
             <img v-if="reqParams.photo" :src="reqParams.photo" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -61,6 +62,17 @@ export default {
     this.getUserInfo()
   },
   methods: {
+    // 使用自己的请求方法 http-request 调用这个属性会替她原生的请求 隐性携带参数
+    myHttpRequest (data) {
+      // 使用 axios 上传文件 只能用 formData
+      const fd = new FormData()
+      fd.append('photo', data.file)
+      this.$http.patch('user/photo', fd).then((res) => {
+        const { data: { data } } = res
+        this.reqParams.photo = data.photo
+        eventBus.$emit('upDataPhoto', data.photo)
+      })
+    },
     // namestring非必须用户名 introstring非必须头条号简介 emailstring非必须邮箱  PATCH   user/profile
     // 保存更改
     async updataUserInfo () {
