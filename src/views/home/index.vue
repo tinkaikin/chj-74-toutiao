@@ -87,6 +87,8 @@ export default {
     // 非父子组件传值
     eventBus.$on('upDataUserInfo', (data) => {
       this.name = data
+      userInfo.name = data
+      window.sessionStorage.setItem('chj74-toutiao', JSON.stringify(userInfo))
     })
   },
   methods: {

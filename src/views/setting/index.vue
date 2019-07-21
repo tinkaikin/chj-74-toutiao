@@ -72,7 +72,7 @@ export default {
       this.$message.success('修改成功')
       // 把数据传到home组件里
       eventBus.$emit('upDataUserInfo', data.name)
-      // 把本地数据库重新更改
+      // 把本地数据库重新更改 在home组件里完成了
     },
     async getUserInfo () {
       const { data: { data } } = await this.$http.get('user/profile')
