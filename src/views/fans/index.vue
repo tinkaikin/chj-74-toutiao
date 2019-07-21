@@ -7,7 +7,7 @@
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="粉丝列表" name="list">
            <!-- {id: BigNumber, name: "13552580169", photo: "http://touti -->
-          <div class='fans-list' v-for="item in fensList" :key="item.index">
+          <div class='fans-list' v-for="item in fensList" :key="item.id.toString()">
             <el-avatar :size="70" :src="item.photo"></el-avatar>
             <p>{{item.name}}</p>
             <el-button type="primary" size="mini">+ 关注</el-button>
