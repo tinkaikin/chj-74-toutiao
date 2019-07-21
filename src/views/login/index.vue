@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <el-card class="login-card">
-      <img src="@/assets/images/logo_index.png" alt="logo_index.png">
+      <img src="../../assets/images/logo_index.png" alt="logo_index.png">
       <!-- s=表单 -->
       <!-- :model="loginForm" 获取表单所有数据的集合在data里面定义好 基本必须-->
       <!-- :rules="rules"  制定表单验证规则 配合  + prop='要验证的文本框'  + 下面定义的规则  基本必须    -->

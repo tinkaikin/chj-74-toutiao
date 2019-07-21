@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <img src="@/assets/images/welcomes.jpg" alt="" srcset="">
+    <img src="@/assets/images/welcomes.jpg" alt="">
   </div>
 </template>
 
