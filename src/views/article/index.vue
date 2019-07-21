@@ -49,7 +49,7 @@
           <template slot-scope="scope">
             <el-image :src="scope.row.cover.images[0]" style="width:100px;height:74px">
               <div slot="error">
-                <img src="../../assets/images/error.gif" width="100" height="74">
+                <img src="@/assets/images/error.gif" width="100" height="74">
               </div>
             </el-image>
           </template>
