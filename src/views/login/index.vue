@@ -59,7 +59,7 @@ export default {
         mobile: [
           {
             required: true,
-            message: '请输入手机号码(13200000000)',
+            message: '请输入手机号码(18801134129)',
             trigger: 'blur'
           },
           { validator: validateMobile, trigger: 'blur' }
